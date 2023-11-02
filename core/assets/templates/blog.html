@@ -1,0 +1,176 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}Stand Blog | Blogs Page{% endblock title %}
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Recent Posts</h4>
+                            <h2>Our Recent Blog Entries</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+    <section class="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-content">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <span>Stand Blog HTML5 Template</span>
+                                <h4>Creative HTML Template For Bloggers!</h4>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="main-button">
+                                    <a href="https://templatemo.com/tm-551-stand-blog" target="_parent">Download
+                                        Now!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            {% for item in items %}
+                                <div class="col-lg-6">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            <img style="border: 0.7px solid lightgray;" src="{{ item.image.url }}"
+                                                 alt="" width="350" height="322">
+                                        </div>
+                                        <div class="down-content">
+                                            <span>{{ item.category }}</span>
+                                            <a href="{% url 'post_details' slug=item.slug %}">
+                                                <h4>{{ item.title }}</h4></a>
+                                            <ul class="post-info"
+                                                style="display: inline-block; max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                                <li>
+                                                    <a href="{% url 'post_details' slug=item.slug %}">{{ item.author }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'post_details' slug=item.slug %}">{{ item.updated_ad|date:"M d, Y" }}</a>
+                                                </li>
+                                            </ul>
+                                            <p>{{ item.content|slice:"105" }}...</p>
+                                            <div class="post-options">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <ul class="post-tags">
+                                                            <li><i class="fa fa-tags"></i></li>
+                                                            {% for tag in item.tag.all %}
+                                                                <li><a href="#">{{ tag.name }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                             <div class="col-lg-12">
+                                    <ul class="page-numbers">
+                                        {% if items.has_previous %}
+                                            <li><a href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                                            <li>
+                                                <a href="?page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
+                                            </li>
+                                        {% endif %}
+                                        <li class="active"><a href="?page={{ items.number }}">{{ items.number }}</a>
+                                        </li>
+                                        {% if items.has_next %}
+                                            <li><a href="?page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
+                                        </li>
+                                            <li><a href="?page={{ items.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a>
+                                        </li>
+                                    {% endif %}
+                                    </ul>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        <div class="row">
+
+                            <div class="col-lg-12">
+                                <div class="sidebar-item recent-posts" style="	margin-top: 0px;">
+                                    <div class="sidebar-heading">
+                                        <h2>Recent Posts</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>{% for post in posts %}
+                                            <li><a href="{% url 'post_details' slug=post.slug %}">
+                                                <h5>{{ post.title }}</h5>
+                                                <span>{{ post.updated_ad }}</span>
+                                            </a></li>
+                                        {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item categories">
+                                    <div class="sidebar-heading">
+                                        <h2>Categories</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for post in posts %}
+                                                {% if post.status == 'published' %}
+                                                    {% ifchanged %}
+                                                        <li><a href="#">- {{ post.category }}</a></li>
+                                                    {% endifchanged %}
+                                                {% endif %}
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item tags">
+                                    <div class="sidebar-heading">
+                                        <h2>Tag Clouds</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for tag in tags %}
+                                                <li><a href="#">- {{ tag }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

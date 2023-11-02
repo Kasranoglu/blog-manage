@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %} Stand Blog - Post Details {% endblock title %}
+
+{% block content %}
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Post Details</h4>
+                            <h2>Single blog post</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="blog-post">
+                                    <div class="blog-thumb">
+                                        <img style="border: 0.7px solid lightgray;" src="{{ chosen.image.url }}"
+                                             width="770" height="340" alt="">
+                                    </div>
+                                    <div class="down-content">
+                                        <span>{{ chosen.category }}</span>
+                                        <a href={% url 'post_details' slug=chosen.slug %}><h4>{{ chosen.title }}</h4>
+                                        </a>
+                                        <ul class="post-info">
+                                            <li><a href="#">{{ chosen.author }}</a></li>
+                                            <li><a href="#">{{ chosen.updated_ad }}</a></li>
+                                            <li><a href="#">{{ comment_counter }} Comments</a></li>
+                                            <li><a href="{% url 'like' chosen.slug %}">
+                                                {{ chosen.total_likes }} {% if request.user in chosen.likes.all %}
+                                                    <i class="fas fa-heart"></i> Beğeniyi Kaldır
+                                                {% else %}
+                                                    <i class="far fa-heart"></i> Beğen
+                                                {% endif %}
+                                            </a></li>
+                                        </ul>
+                                        <p>{{ chosen.content }}</p>
+                                        <div class="post-options">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <ul class="post-tags">
+                                                        <li><i class="fa fa-tags"></i></li>
+                                                        {% for tag in chosen.tag.all %}
+                                                            <li><a href="#">{{ tag.name }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <div class="col-6">
+                                                    <ul class="post-share">
+                                                        <li><i class="fa fa-share-alt"></i></li>
+                                                        <li><a href="#">Facebook</a>,</li>
+                                                        <li><a href="#"> Twitter</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item comments">
+                                    <div class="sidebar-heading">
+                                        <h2>{{ comment_counter }} comments</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for comment in comments %}
+                                                {% if comment.post == chosen %}
+                                                    <li style="width: 609.99px">
+
+                                                        <div class="author-thumb">
+                                                            <img src="{% static 'assets/images/comment-author-02.jpg' %}"
+                                                                 alt="">
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ comment.author.first_name }} {{ comment.author.last_name }}<span>{{ comment.updated_ad }}</span>
+                                                            </h4>
+                                                            <p>{{ comment.content }}</p>
+                                                        </div>
+
+
+                                                    </li>
+
+                                                {% endif %}
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item submit-comment">
+                                    <div class="sidebar-heading">
+                                        <h2>Send comment</h2>
+                                    </div>
+                                    <div class="content">
+                                        <form id="comment" action="/send_comment" method="post">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <fieldset>
+                                                    <textarea style="height: 150px; font-size: 15px" name="comment"
+                                                              rows="6" id="comment"
+                                                              placeholder="Type your comment" required=""></textarea>
+                                                    </fieldset>
+                                                    <input type="hidden" name="post_id" value="{{ chosen.id }}">
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <fieldset>
+                                                        <button type="submit" id="form-submit" class="main-button">Send
+                                                        </button>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sidebar-item recent-posts" style="	margin-top: 0px;">
+                                    <div class="sidebar-heading">
+                                        <h2>Recent Posts</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>{% for post in posts %}
+                                            {% if post.status == "published" %}
+                                                <li><a href={% url 'post_details' slug=post.slug %}>
+                                                    <h5>{{ post.title }}</h5>
+                                                    <span>{{ post.updated_ad }}</span>
+                                                </a></li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item categories">
+                                    <div class="sidebar-heading">
+                                        <h2>Categories</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            <ul>
+                                                {% for post in posts %}
+                                                    {% if post.status == 'published' %}
+                                                        {% ifchanged %}
+                                                            <li><a href="#">- {{ post.category }}</a></li>
+                                                        {% endifchanged %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item tags">
+                                    <div class="sidebar-heading">
+                                        <h2>Tag Clouds</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for tag in tags %}
+                                                <li><a href="#">- {{ tag }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock content %}
+
+
+</body>
+
+</html>

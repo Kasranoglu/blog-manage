@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}Stand Blog | Add Post{% endblock title %}
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Create a Post</h4>
+                            <h2>Use your Creativity!</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% if form.errors %}
+        <br>
+        <div class="alert alert-danger">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field|capfirst }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <section class="contact-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="down-contact">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="sidebar-item contact-form">
+                                    <div class="sidebar-heading">
+                                        <h2>New Post</h2>
+                                    </div>
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <button type="submit">Create a Post</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
